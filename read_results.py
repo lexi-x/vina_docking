@@ -2,6 +2,7 @@ import os
 import glob
 import argparse
 import pandas as pd
+import logging
 
 parser = argparse.ArgumentParser(prog='results_processing', description='Get directory for data processing')
 parser.add_argument('results_dir',help='directory of result files')
