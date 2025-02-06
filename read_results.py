@@ -26,4 +26,4 @@ for file in files:
 # Compile scores and files in csv format
 df = pd.DataFrame({"file":filenames, "affinity":affinities})
 df_sorted = df.sort_values(by="affinity")
-df_sorted.to_csv(args.output_name)
+df_sorted.to_csv(args.output_name,index=False)
