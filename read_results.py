@@ -24,6 +24,6 @@ for file in files:
     affinities.append(float(line.split()[3]))
 
 # Compile scores and files in csv format
-df = pd.DataFrame({"file":filenames, "affinities":affinities})
-df.to_csv(args.output_name)
-print(df) 
+df = pd.DataFrame({"file":filenames, "affinity":affinities})
+df_sorted = df.sort_values(by="affinity")
+df_sorted.to_csv(args.output_name)
