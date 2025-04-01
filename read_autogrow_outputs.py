@@ -19,9 +19,9 @@ def extract_data_from_line(line):
     return smiles, name, affinity_score
 
 # Function to process a single file
-def process_file(file_path):
+def process_file(file_path, vset):
     extracted_data = []
-    
+    visited = vset
     # Open the file for reading
     with open(file_path, 'r') as file:
         # Read each line in the file
@@ -29,15 +29,17 @@ def process_file(file_path):
             # Extract data from the line
             smiles, name, affinity_score = extract_data_from_line(line)
             # Store the extracted data
-            if affinity_score < -7.5:
+            if smiles not in vset:
                 extracted_data.append((smiles, name, affinity_score))
-    return extracted_data
+            vset.add(smiles)
+    return extracted_data, vset
 
 # Function to parse a directory and process all files ending with '_ranked.smi'
 def process_directory(directory_path):
     # Use glob to find all files ending with '_ranked.smi' in the directory and subdirectories
     file_pattern = os.path.join(directory_path, '**', '*_ranked.smi')
     files = glob.glob(file_pattern, recursive=True)
+    visited = set()
     
     # Prepare a list to hold all extracted data
     all_data = []
@@ -45,7 +47,7 @@ def process_directory(directory_path):
     # Loop through all found files
     for file_path in files:
         # print(f"Processing file: {file_path}")
-        extracted_data = process_file(file_path)
+        extracted_data, visited = process_file(file_path, visited)
         
         # Add the extracted data to the list
         all_data.extend(extracted_data)
@@ -59,7 +61,7 @@ def process_directory(directory_path):
 # Main function to execute the extraction on a given directory
 def main():
     # Specify the directory path to process 
-    directory_path = '/home/lexi/autogrow4/autogrow_results' 
+    directory_path = '/home/lexi/autogrow4/autogrow_results/by_MW/under_100MW_10gen/under_100MW_10gen_T1' 
     output_csv = 'autogrow_best_compounds.csv'  # Output CSV file
 
     # Process the directory and get the DataFrame with the extracted data
